@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF‑8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlowBeauty</title>
+  <style>
+    /* Reset & Typography */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: Arial, sans-serif; background:#fff0f5; color:#333; }
+
+    /* Header */
+    header {
+      background: #FC809F;
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top:0;
+    }
+    header h1 { font-size: 1.8rem; }
+    nav a { color: #fff; margin: 0 0.5rem; font-weight: bold; }
+    #cart-btn {
+      background: #ffc0cb;
+      border:none;
+      border-radius:4px;
+      padding:0.5rem 1rem;
+      cursor:pointer;
+      position: relative;
+    }
+    #cart-count {
+      background: red;
+      color: #fff;
+      border-radius:50%;
+      font-size:0.8rem;
+      width:18px; height:18px;
+      display: inline-block;
+      text-align:center;
+      line-height:18px;
+      position: absolute;
+      top: -8px; right: -8px;
+    }
+
+    /* Home Intro */
+    #home-intro {
+      padding: 1.5rem 2rem;
+      text-align: center;
+    }
+    #home-intro h2 { color: #FC809F; font-size: 2rem; margin-bottom: 0.5rem; }
+    #home-intro p { font-size: 1rem; line-height:1.6; color:#555; }
+
+    /* Produk Grid */
+    #products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+      gap: 1rem;
+      padding: 1.5rem 2rem;
+    }
+    .card {
+      background: #fff;
+      border: 2px solid #ffc0cb;
+      border-radius: 8px;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: transform .2s;
+    }
+    .card:hover { transform: translateY(-5px); }
+    .card img { width:100%; height:180px; object-fit:cover; }
+    .card h2 { font-size:1.2rem; margin:0.7rem 0; color:#FC809F; }
+    .card p { font-size:0.9rem; padding:0 0.8rem; height:3rem; overflow:hidden; }
+    .price { color: #FC809F; font-weight: bold; margin:0.7rem 0; }
+    .card button {
+      background: #FC809F; border:none; color:#fff;
+      padding: 0.5rem 1rem; margin-bottom:0.7rem;
+      border-radius:4px; cursor:pointer;
+    }
+
+    /* Modal (Produk & cart) */
+    .modal {
+      display:none; position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.5);
+      align-items:center; justify-content:center;
+      padding:1rem;
+    }
+    .modal-content {
+      background:#fff;
+      border-radius:8px;
+      max-width:500px; width:100%;
+      position:relative;
+      padding:1.5rem;
+      max-height:90vh;
+      overflow-y:auto;
+    }
+    .close {
+      position:absolute; top:10px; right:15px;
+      font-size:1.5rem; cursor:pointer; color:#333;
+    }
+
+    /* Cart table */
+    #cart-table { width:100%; border-collapse:collapse; margin-bottom:1rem; }
+    #cart-table th, #cart-table td {
+      padding:0.5rem; border:1px solid #ddd; text-align:left;
+    }
+    #cart-total { text-align:right; font-weight:bold; margin-top:0.5rem; }
+    #checkout-btn {
+      background: #FC809F; border:none; color:#fff;
+      padding:0.7rem 1rem; border-radius:4px;
+      cursor:pointer; width:100%;
+    }
+
+    /* Kontak Form */
+    #contact {
+      padding:2rem; background:#ffe4e1;
+    }
+    #contact h2 { text-align:center; color:#FC809F; margin-bottom:1rem; }
+    #contact form {
+      background:#fff; padding:1.5rem;
+      border:1px solid #ffc0cb; border-radius:8px;
+      max-width:400px; margin:auto;
+    }
+    #contact label { display:block; margin:0.6rem 0 0.2rem; }
+    #contact input, #contact textarea {
+      width:100%; padding:0.6rem;
+      border:1px solid #ffc0cb; border-radius:4px;
+    }
+    #contact button {
+      margin-top:1rem; background:#FC809F;
+      border:none; color:#fff; padding:0.7rem;
+      width:100%; border-radius:4px; cursor:pointer;
+      font-size:1rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align:center; padding:1rem;
+      background:#FC809F; color:#fff;
+      margin-top:2rem; font-size:0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>GlowBeauty</h1>
+  <nav>
+    <a href="#home-intro">Home</a>
+    <a href="#products">Produk</a>
+    <a href="#contact">Kontak</a>
+  </nav>
+  <button id="cart-btn" onclick="openCart()">
+    🛒 <span id="cart-count">0</span>
+  </button>
+</header>
+
+<section id="home-intro">
+  <h2>Selamat Datang di GlowBeauty!</h2>
+  <p>Hai, Cantik! Selamat datang di GlowBeauty, tempat di mana kamu bisa menemukan segala hal yang</p>
+  <p>membuatmu semakin bersinar. Kami punya berbagai produk makeup yang siap menemani hari-harimu.</p>
+  <p>Semua ada di sini!</p>
+</section>
+
+<main>
+  <section id="products"></section>
+
+  <!-- Modal Produk -->
+  <div id="modal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal(event)">×</span>
+      <img id="modalImg" src="" alt="" style="width:100%; border-radius:4px;">
+      <h2 id="modalTitle" style="color:#FC809F; margin-top:1rem;"></h2>
+      <p class="price" id="modalPrice" style="font-size:1.2rem; color:#FC809F;"></p>
+      <p id="modalDesc"></p>
+      <button onclick="addToCart()" style="background:#FC809F;color:#fff;padding:0.7rem;width:100%;border:none;border-radius:4px;cursor:pointer;">
+        Tambah ke Keranjang
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal Keranjang -->
+  <div id="cart-modal" class="modal" onclick="closeCart(event)">
+    <div class="modal-content">
+      <span class="close" onclick="closeCart(event)">×</span>
+      <h2>Keranjang Belanja</h2>
+      <table id="cart-table">
+        <thead><tr><th>Produk</th><th>Qty</th><th>Harga</th><th>Subtotal</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div id="cart-total">Total: Rp0</div>
+      <button id="checkout-btn" onclick="checkout()">Checkout</button>
+    </div>
+  </div>
+</main>
+
+<section id="contact">
+  <h2>Kontak Kami</h2>
+  <form onsubmit="alert('Terima kasih Untuk Masukannya!'); return false;">
+    <label>Nama:</label><input type="text" required>
+    <label>Email:</label><input type="email" required>
+    <label>Kirimkan Pesan/Masukan:</label><textarea rows="4" required></textarea>
+    <button type="submit">Kirim</button>
+  </form>
+</section>
+
+<footer>&copy; 2025 GlowBeauty • GlowBeauty@gmail.com • +62‑812‑3456‑7888</footer>
+
+<script>
+  const products = [
+    {id:1, title:'Eyeshadow Palette', price:100000, img:'eyeshadow.jpeg', desc:'Eyeshadow Palette yang memiliki banyak warna pilihan untuk segala jenis acara'},
+    {id:2, title:'Cream Blush', price:75000, img:'cream blush.png', desc:'Cream Blush yang cocok digunakan sehari-hari'},
+    {id:3, title:'Fondation', price:100000, img:'fondation.png', desc:'Fondation full coverage cocok untuk semua acara'},
+    {id:4, title:'Baked Blush', price:120000, img:'baked blush 2.jpg', desc:'Tampilan blush yang natural dan mudah dibawa kemana-mana'},
+    {id:5, title:'Liquid Blush', price:95000, img:'liquid blush.png', desc:'Liquid blush yang memiliki tekstur ringan, mudah di blend dan memiliki warna high-pigmented'},
+    {id:6, title:'Lipstick', price:60000, img:'lipstick.jpg', desc:'Memberikan warna yang pigmented pada bibir, dengan satu kali olesan dapat memberikan tampilan bibir yang memukau'},
+    {id:7, title:'Two Way Cake', price:140000, img:'twc.png', desc:'Powerstay Matte Powder Foundation merupakan bedak dengan hasil full coverage'},
+    {id:8, title:'Cushion', price:185000, img:'cushion.jpg', desc:'Powerstay Demi-Matte Cover Cushion merupakan cushion yang dapat menyesuaikan dengan kondisi kulit selama pemakaian untuk hasil flawless selama 24 jam'},
+    {id:9, title:'Eyeliner', price:65000, img:'eyeliner.jpeg', desc:'Eyeliner spidol semi permanen yang super gampang diaplikasikan bahkan untuk pemula. Performa waterproof, smudgeproof, dan tahan lama hingga 48 jam. Eyeliner dengan warna hitam pekat dan tahan hingga 48 jam'},
+    {id:10,title:'Setting Spray', price:55000, img:'settingspray.jpg', desc:'Setting spray merupakan salah satu jenis produk yang dapat membuat riasan lebih awet dan tahan lama.'}
+  ];
+
+  let cart = [];
+  let currentProduct = null;
+
+  // Render produk
+  products.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <img src="${p.img}" alt="${p.title}">
+      <h2>${p.title}</h2>
+      <p>${p.desc}</p>
+      <div class="price">Rp${p.price.toLocaleString()}</div>
+      <button onclick="showDetail(${p.id})">Detail</button>
+    `;
+    document.getElementById('products').appendChild(card);
+  });
+
+  function showDetail(id) {
+    currentProduct = products.find(x=>x.id===id);
+    document.getElementById('modalImg').src = currentProduct.img;
+    document.getElementById('modalTitle').innerText = currentProduct.title;
+    document.getElementById('modalPrice').innerText = 'Rp' + currentProduct.price.toLocaleString();
+    document.getElementById('modalDesc').innerText = currentProduct.desc;
+    document.getElementById('modal').style.display = 'flex';
+  }
+
+  function closeModal(e) {
+    if (e.target.classList.contains('modal') || e.target.classList.contains('close'))
+      document.getElementById('modal').style.display = 'none';
+  }
+
+  function addToCart() {
+    const item = cart.find(c=>c.id===currentProduct.id);
+    if (item) item.qty++;
+    else cart.push({ id:currentProduct.id, title:currentProduct.title, price:currentProduct.price, qty:1 });
+    updateCartCount();
+    document.getElementById('modal').style.display = 'none';
+  }
+
+  function updateCartCount() {
+    const count = cart.reduce((a,b)=>a+b.qty, 0);
+    document.getElementById('cart-count').innerText = count;
+  }
+
+  function openCart() {
+    renderCart();
+    document.getElementById('cart-modal').style.display = 'flex';
+  }
+
+  function closeCart(e) {
+    if (e.target.classList.contains('modal') || e.target.classList.contains('close'))
+      document.getElementById('cart-modal').style.display = 'none';
+  }
+
+  function renderCart() {
+    const tbody = document.querySelector('#cart-table tbody');
+    tbody.innerHTML = '';
+    let total = 0;
+    cart.forEach(c => {
+      const sub = c.price * c.qty;
+      total += sub;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${c.title}</td>
+        <td>${c.qty}</td>
+        <td>Rp${c.price.toLocaleString()}</td>
+        <td>Rp${sub.toLocaleString()}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+    document.getElementById('cart-total').innerText = 'Total: Rp' + total.toLocaleString();
+  }
+
+  function checkout() {
+    alert('Checkout berhasil! ' + document.getElementById('cart-total').innerText);
+    cart = [];
+    updateCartCount();
+    document.getElementById('cart-modal').style.display = 'none';
+  }
+</script>
+</body>
+</html>
