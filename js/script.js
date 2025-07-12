@@ -70,7 +70,27 @@ const products = [
     desc: 'Ultimate Matte Loose Powder adalah bedak tabur super, lindungi riasan dari kilap dan luntur sepanjang hari - cocok untuk aktivitas penuh percaya diri!'
   }
 ];
+// DOM elements
+const burger = document.getElementById('burger-btn');
+const offcanvas = document.getElementById('offcanvas-nav');
+const closeBtn = document.getElementById('close-btn');
 
+// Open sidebar
+burger.addEventListener('click', () => {
+  document.body.classList.add('offcanvas-open');
+});
+
+// Close sidebar
+closeBtn.addEventListener('click', () => {
+  document.body.classList.remove('offcanvas-open');
+});
+
+// Close if click outside
+window.addEventListener('click', e => {
+  if (e.target === offcanvas) {
+    document.body.classList.remove('offcanvas-open');
+  }
+});
 let cart = [];
 let currentProduct = null;
 
