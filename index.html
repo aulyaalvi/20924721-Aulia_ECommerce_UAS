@@ -8,13 +8,22 @@
 </head>
 <body>
 
-  <header>
-    <h1>GlowBeauty</h1>
-    <nav>
-      <a href="#home-intro">Home</a>
-      <a href="#products">Produk</a>
-      <a href="#contact">Kontak</a>
-    </nav>
+  <header id="navbar">
+    <div class="nav-container">
+      <h1 class="logo">GlowBeauty</h1>
+      <button id="burger-btn" class="burger">☰</button>
+      <nav id="offcanvas-nav" class="offcanvas">
+        <button id="close-btn" class="close">&times;</button>
+        <a href="#home-intro">Home</a>
+        <a href="#products">Produk</a>
+        <a href="#contact">Kontak</a>
+      </nav>
+      <div class="nav-links">
+        <a href="#home-intro">Home</a>
+        <a href="#products">Produk</a>
+        <a href="#contact">Kontak</a>
+      </div>
+    </div>
     <button id="cart-btn" onclick="openCart()">
       🛒 Cart <span id="cart-count">0</span>
     </button>
