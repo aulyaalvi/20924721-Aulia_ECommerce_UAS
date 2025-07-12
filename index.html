@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlowBeauty</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header>
+    <h1>GlowBeauty</h1>
+    <nav>
+      <a href="#home-intro">Home</a>
+      <a href="#products">Produk</a>
+      <a href="#contact">Kontak</a>
+    </nav>
+    <button id="cart-btn" onclick="openCart()">
+      🛒 Cart <span id="cart-count">0</span>
+    </button>
+  </header>
+
+  <section id="home-intro">
+    <h2>Selamat Datang di GlowBeauty!</h2>
+    <p>Hai, Cantik! Selamat datang di GlowBeauty, tempat di mana kamu bisa menemukan segala hal yang</p>
+    <p>membuatmu semakin bersinar. Kami punya berbagai produk makeup, skincare, dan perawatan tubuh yang</p>
+    <p>siap menemani hari-harimu. Mulai dari tampilan natural hingga glamor, semua ada di sini!</p>
+  </section>
+
+  <main>
+    <section id="products"></section>
+
+    <!-- Modal Produk -->
+    <div id="modal" class="modal" onclick="closeModal(event)">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal(event)">×</span>
+        <img id="modalImg" src="" alt="" style="width:100%; border-radius:4px;">
+        <h2 id="modalTitle" style="color:#ff1493; margin-top:1rem;"></h2>
+        <p class="price" id="modalPrice" style="font-size:1.2rem; color:#ff1493;"></p>
+        <p id="modalDesc"></p>
+        <button onclick="addToCart()" style="background:#ff1493;color:#fff;padding:0.7rem;width:100%;border:none;border-radius:4px;cursor:pointer;">
+          Tambah ke Cart
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal Keranjang -->
+    <div id="cart-modal" class="modal" onclick="closeCart(event)">
+      <div class="modal-content">
+        <span class="close" onclick="closeCart(event)">×</span>
+        <h2>Keranjang Belanja</h2>
+        <table id="cart-table">
+          <thead><tr><th>Produk</th><th>Qty</th><th>Harga</th><th>Subtotal</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div id="cart-total">Total: Rp0</div>
+        <button id="checkout-btn" onclick="checkout()">Checkout</button>
+      </div>
+    </div>
+  </main>
+
+  <section id="contact">
+    <h2>Kontak Kami</h2>
+    <form onsubmit="alert('Terima kasih Untuk Masukannya!'); return false;">
+      <label>Nama:</label><input type="text" required>
+      <label>Email:</label><input type="email" required>
+      <label>Kirimkan Pesan/Masukan:</label><textarea rows="4" required></textarea>
+      <button type="submit">Kirim</button>
+    </form>
+  </section>
+
+  <footer>&copy; 2025 GlowBeauty • email@GlowBeauty.com • +62-812-3456-7888</footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
